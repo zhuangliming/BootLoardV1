@@ -28,7 +28,11 @@ uint8_t m=0;
 void delay_msp(void);
 void delay_msp(void)
 {
+#if BUAD == 9600
     u32 i=100000;
+#elseif BUAD == 19200
+    u32 i=50000;    
+#endif
     while(i--);
 }
 
