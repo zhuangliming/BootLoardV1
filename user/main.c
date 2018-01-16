@@ -4,7 +4,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "common.h"
 
-void IAP_Init(void);
+static void IAP_Init(void);
 /* Private typedef -----------------------------------------------------------*/
 
 static void delay_ms(uint16_t time)
@@ -53,7 +53,7 @@ int main(void)
 * Description    : Initialize the IAP: Configure RCC, USART and GPIOs.
 * Return         : None
 */
-void IAP_Init(void)
+static void IAP_Init(void)
 {
     UART_CFG_Type UARTConfigStruct;
     UART_FIFO_CFG_Type UARTFIFOConfigStruct;
@@ -69,7 +69,7 @@ void IAP_Init(void)
     PinCfg.Funcnum = 0;
     PinCfg.Pinnum = 5;
     PINSEL_ConfigPin( &PinCfg );
-    /*p2.4*/
+    /*p2.4 rs485 ctrl pin*/
     PinCfg.Funcnum = 0;
     PinCfg.Pinnum = 4;
     PINSEL_ConfigPin( &PinCfg );
