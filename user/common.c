@@ -21,7 +21,7 @@ static void delay_msp(void)
     u32 i;
 #if BUAD == 9600
     i=100000;
-#elseif BUAD == 19200
+#else BUAD == 19200
     i=50000;
 #endif
     while(i--);
