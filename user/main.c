@@ -3,13 +3,11 @@
 */
 /* Includes ------------------------------------------------------------------*/
 #include "common.h"
-
+#include "platform_config.h"
 void RCC_Configuration(void);
 void IAP_Init(void);
 /* Private typedef -----------------------------------------------------------*/
 
-#define IAP_LED_ON   GPIO_SetBits(GPIOB, GPIO_Pin_0)
-#define IAP_LED_OFF  GPIO_ResetBits(GPIOB, GPIO_Pin_0)
 
 extern u32 *AppAddress;
 
@@ -28,6 +26,7 @@ int main(void)
     int i;
     AppAddress=&APP;
     IAP_Init();
+    LED_INIT();
     BootInit();
     SerialPutString("\r\n----------------------------------------------------------");
     SerialPutString("\r\n            LPC1758  Cortex-M3 System Update V1.1         ");
@@ -82,10 +81,9 @@ void IAP_Init(void)
     PinCfg.Funcnum = 0;
     PinCfg.Pinnum = 4;
     PINSEL_ConfigPin( &PinCfg );
-    GPIO_SetDir(1, 1<<23, 1);
     GPIO_SetDir( 2, ( 1 << 5 )|(1<<4), 1 );
     UARTConfigStruct.Databits = UART_DATABIT_8;
-    UARTConfigStruct.Baud_rate = 9600;
+    UARTConfigStruct.Baud_rate = BAUD;
     UARTConfigStruct.Parity = UART_PARITY_NONE;
     UARTConfigStruct.Stopbits = UART_STOPBIT_1;
     UART_Init( ( LPC_UART_TypeDef * )LPC_UART1, &UARTConfigStruct );

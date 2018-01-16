@@ -16,13 +16,15 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __PLATFORM_CONFIG_H
 #define __PLATFORM_CONFIG_H
+
 #include <stdio.h>
-typedef uint8_t u8; 
-typedef uint16_t u16; 
-typedef uint32_t u32; 
-typedef int8_t s8; 
-typedef uint16_t s16; 
-typedef int32_t s32; 
+
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef int8_t s8;
+typedef uint16_t s16;
+typedef int32_t s32;
 typedef volatile uint32_t vu32;
 typedef int8_t bool;
 
@@ -30,43 +32,14 @@ typedef enum _FLASH_Status{
    FLASH_COMPLETE=0,
 }FLASH_Status;
 
+/*led*/
+#define LED_INIT()      GPIO_SetDir(1, 1<<23, 1)
+#define LED_ON()  	    GPIO_ClearValue(1, 1<<23)
+#define LED_OFF()       GPIO_SetValue(1, 1<<23)
 
-/* Includes ------------------------------------------------------------------*/
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* Uncomment the line corresponding to the STMicroelectronics evaluation board
-   used to run the example */
-#if !defined (USE_STM3210B_EVAL) &&  !defined (USE_STM3210E_EVAL)
- #define USE_STM3210B_EVAL
-// #define USE_STM3210E_EVAL
-#endif
-
-  #define GPIO_KEY_BUTTON                   GPIOA
-  #define RCC_APB2Periph_GPIO_KEY_BUTTON    RCC_APB2Periph_GPIOA
-  #define GPIO_PIN_KEY_BUTTON               GPIO_Pin_4
- // #define PAGE_SIZE                         4096UL
-  #define FLASH_SIZE                        (0x80000)	// 128K
-
-
-
-/* Define the STM32F10x hardware depending on the used evaluation board */
-#ifdef USE_STM3210B_EVAL					 // USE_STM3210B_EVAL
-  #define GPIO_KEY_BUTTON                   GPIOA
-  #define RCC_APB2Periph_GPIO_KEY_BUTTON    RCC_APB2Periph_GPIOA
-  #define GPIO_PIN_KEY_BUTTON               GPIO_Pin_4
-  //#define PAGE_SIZE                         4096UL
-  #define FLASH_SIZE                        (0x80000)	// 128K
-/*
-#elif defined USE_STM3210E_EVAL
-  #define GPIO_KEY_BUTTON                   GPIOB    
-  #define RCC_APB2Periph_GPIO_KEY_BUTTON    RCC_APB2Periph_GPIOB
-  #define GPIO_PIN_KEY_BUTTON               GPIO_Pin_10
-  #define PAGE_SIZE                         (0x800)
-  #define FLASH_SIZE                        (0x80000)	// 512K
-*/
-#endif
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
+#define ApplicationAddress      0x0002000 /*User app address*/
+#define BAUD                    19200
+#define FLASH_SIZE              (0x80000)	// 128K
 
 #endif /* __PLATFORM_CONFIG_H */
 

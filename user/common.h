@@ -25,7 +25,7 @@
 #include "lpc17xx_iap.h"
 #include "lpc17xx_pinsel.h"
 #include "ymodem.h"
-#include "platform_config.h" 
+#include "platform_config.h"
 #include "Boot.h"
 /* Exported types ------------------------------------------------------------*/
 //typedef  void (*pFunction)(void);
@@ -34,8 +34,8 @@
 /* Constants used by Serial Command Line Mode */
 #define CMD_STRING_SIZE       128
 
-#define ApplicationAddress    0x0002000
-              
+
+
 /* Exported macro ------------------------------------------------------------*/
 /* Common routines */
 #define IS_AF(c)  ((c >= 'A') && (c <= 'F'))
@@ -44,8 +44,7 @@
 #define ISVALIDHEX(c)  IS_AF(c) || IS_af(c) || IS_09(c)
 #define ISVALIDDEC(c)  IS_09(c)
 #define CONVERTDEC(c)  (c - '0')
-#define LED_ON()  	GPIO_ClearValue(1, 1<<23)
-#define LED_OFF()       GPIO_SetValue(1, 1<<23)
+
 
 #define CONVERTHEX_alpha(c)  (IS_AF(c) ? (c - 'A'+10) : (c - 'a'+10))
 #define CONVERTHEX(c)   (IS_09(c) ? (c - '0') : CONVERTHEX_alpha(c))
