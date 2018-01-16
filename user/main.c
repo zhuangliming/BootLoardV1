@@ -22,19 +22,21 @@ int main(void)
     IAP_Init();
     LED_INIT();
     SerialPutString("\r\n----------------------------------------------------------");
-    SerialPutString("\r\n            LPC1758  Cortex-M3 System Update V1.1         ");
+    SerialPutString("\r\n            LPC1758  Cortex-M3 System Update V1.0         ");
     SerialPutString("\r\n  Note: this operation will upgrade your system firmware! ");
+    SerialPutString("\r\n                     Date: 2018-01-16   Designer: ZLM&LYF ");
     SerialPutString("\r\n----------------------------------------------------------");
     SerialPutString("\r\n\r\n");
-    SerialPutString(" Press Z to continue\r\n");
-    for(i=0;i<100;i++)
+    SerialPutString(" Press 'Z' key to continue!\r\n");
+    /*3S Watting*/
+    for(i=0;i<50;i++)
     {
         if(SerialKeyPressed(&user_key))
         {
-            if(user_key == 'z')
+            if((user_key == 'z')||(user_key == 'Z'))
             {
                 Main_Menu ();
-                i=101;
+                i=0xFFFE;
             }
         }
         delay_ms(100);
