@@ -35,7 +35,7 @@ typedef enum _FLASH_Status
 
 /*led*/
 #define LED_INIT()      GPIO_SetDir(1, 1<<23, 1)
-#define LED_ON()  	    GPIO_ClearValue(1, 1<<23)
+#define LED_ON()        GPIO_ClearValue(1, 1<<23)
 #define LED_OFF()       GPIO_SetValue(1, 1<<23)
 
 #define ApplicationAddress      0x0002000 /*User app address*/
