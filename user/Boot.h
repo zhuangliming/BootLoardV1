@@ -10,16 +10,16 @@
 //lpc1758
 #define MCU_LPC1758           29
 
-//ÓÃ»§³ÌĞòÆğÊ¼µØÖ·
-#define USER_APP_START_ADD	   0x2000ul 
-//ÓÃ»§³ÌĞòÆğÊ¼ÉÈÇøºÅ
+//ç”¨æˆ·ç¨‹åºèµ·å§‹åœ°å€
+#define USER_APP_START_ADD	   ApplicationAddress       
+//ç”¨æˆ·ç¨‹åºèµ·å§‹æ‰‡åŒº
 #define USER_APP_START_SEC     2
-//×Ü¿ÉÓÃÉÈÇø
+//æ€»å¯ç”¨æ‰‡åŒº
 #define MCU_FLASH_SEC_MAX      MCU_LPC1758
-//ÓÃ»§¿ÉÓÃÉÈÇø
+//ç”¨æˆ·å¯ç”¨æ‰‡åŒº
 #define USER_FLASH_SEC_COUNT   ( MCU_FLASH_SEC_MAX - USER_APP_START_SEC)
 
-#define  IAP_ENTER_ADR        0x1FFF1FF1                                  /* IAPÈë¿ÚµØÖ·¶¨Òå              */
+#define  IAP_ENTER_ADR        0x1FFF1FF1                                  /* IAPå…¥å£åœ°å€å®šä¹‰              */
 
 
 #define CRP 0x11223344
@@ -32,15 +32,15 @@
 
 
 
-//³õÊ¼»¯Boot
+//åˆå§‹åŒ–Boot
 extern void BootInit( void );
 
-//Æô¶¯ÓÃ»§³ÌĞò
+//å¯åŠ¨ç”¨æˆ·ç¨‹åº
 extern void Boot( void );
 
-//Çå³ıÉÈÇø
+//æ¸…é™¤æ‰‡åŒº
 extern void SetFlashBlank( void );
-//½«Êı¾İĞ´Èëflash
+//å°†æ•°æ®å†™å…¥flash
 extern uint8_t IAPWriteData( uint8_t *dataSrc, uint32_t dataLen );
 
 #endif
