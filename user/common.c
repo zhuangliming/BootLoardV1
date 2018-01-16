@@ -34,16 +34,17 @@ void delay_msp(void)
 
 void LPC17xxHwRS485TxEnable( char cmd)
 {
-	switch(cmd)
-	{
-	case 1:
-		GPIO_SetValue(2, ( 1 << 5 )|(1<<4));
-		break;
-	case 0:
-		GPIO_ClearValue(2, ( 1 << 5 )|(1<<4));
-		break;	
-	default:break;
-	}
+    switch(cmd)
+    {
+    case 1:
+        GPIO_SetValue(2, ( 1 << 5 )|(1<<4));
+        break;
+    case 0:
+        GPIO_ClearValue(2, ( 1 << 5 )|(1<<4));
+        break;
+    default:
+        break;
+    }
 }
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -59,14 +60,18 @@ void Int2Str(uint8_t* str, s32 intnum)
 {
     u32 i, Div = 1000000000, j = 0, Status = 0;
 
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < 10; i++)
+    {
         str[j++] = (intnum / Div) + 48;
 
         intnum = intnum % Div;
         Div /= 10;
-        if ((str[j-1] == '0') & (Status == 0)) {
+        if ((str[j-1] == '0') & (Status == 0))
+        {
             j = 0;
-        } else {
+        }
+        else
+        {
             Status++;
         }
     }
@@ -86,56 +91,77 @@ u32 Str2Int(uint8_t *inputstr, s32 *intnum)
     u32 i = 0, res = 0;
     u32 val = 0;
 
-    if (inputstr[0] == '0' && (inputstr[1] == 'x' || inputstr[1] == 'X')) {
-        if (inputstr[2] == '\0') {
+    if (inputstr[0] == '0' && (inputstr[1] == 'x' || inputstr[1] == 'X'))
+    {
+        if (inputstr[2] == '\0')
+        {
             return 0;
         }
-        for (i = 2; i < 11; i++) {
-            if (inputstr[i] == '\0') {
+        for (i = 2; i < 11; i++)
+        {
+            if (inputstr[i] == '\0')
+            {
                 *intnum = val;
                 /* return 1; */
                 res = 1;
                 break;
             }
-            if (ISVALIDHEX(inputstr[i])) {
+            if (ISVALIDHEX(inputstr[i]))
+            {
                 val = (val << 4) + CONVERTHEX(inputstr[i]);
-            } else {
+            }
+            else
+            {
                 /* return 0, Invalid input */
                 res = 0;
                 break;
             }
         }
         /* over 8 digit hex --invalid */
-        if (i >= 11) {
+        if (i >= 11)
+        {
             res = 0;
         }
-    } else { /* max 10-digit decimal input */
-        for (i = 0; i < 11; i++) {
-            if (inputstr[i] == '\0') {
+    }
+    else     /* max 10-digit decimal input */
+    {
+        for (i = 0; i < 11; i++)
+        {
+            if (inputstr[i] == '\0')
+            {
                 *intnum = val;
                 /* return 1 */
                 res = 1;
                 break;
-            } else if ((inputstr[i] == 'k' || inputstr[i] == 'K') && (i > 0)) {
+            }
+            else if ((inputstr[i] == 'k' || inputstr[i] == 'K') && (i > 0))
+            {
                 val = val << 10;
                 *intnum = val;
                 res = 1;
                 break;
-            } else if ((inputstr[i] == 'm' || inputstr[i] == 'M') && (i > 0)) {
+            }
+            else if ((inputstr[i] == 'm' || inputstr[i] == 'M') && (i > 0))
+            {
                 val = val << 20;
                 *intnum = val;
                 res = 1;
                 break;
-            } else if (ISVALIDDEC(inputstr[i])) {
+            }
+            else if (ISVALIDDEC(inputstr[i]))
+            {
                 val = val * 10 + CONVERTDEC(inputstr[i]);
-            } else {
+            }
+            else
+            {
                 /* return 0, Invalid input */
                 res = 0;
                 break;
             }
         }
         /* Over 10 digit decimal --invalid */
-        if (i >= 11) {
+        if (i >= 11)
+        {
             res = 0;
         }
     }
@@ -155,17 +181,22 @@ u32 GetIntegerInput(s32 * num)
 {
     uint8_t inputstr[16];
 
-    while (1) {
+    while (1)
+    {
         GetInputString(inputstr);
         if (inputstr[0] == '\0') continue;
-        if ((inputstr[0] == 'a' || inputstr[0] == 'A') && inputstr[1] == '\0') {
+        if ((inputstr[0] == 'a' || inputstr[0] == 'A') && inputstr[1] == '\0')
+        {
             SerialPutString("User stop \r\n");
             return 0;
         }
 
-        if (Str2Int(inputstr, num) == 0) {
+        if (Str2Int(inputstr, num) == 0)
+        {
             SerialPutString("Error,Please put again! \r\n");
-        } else {
+        }
+        else
+        {
             return 1;
         }
     }
@@ -181,16 +212,16 @@ u32 GetIntegerInput(s32 * num)
 *******************************************************************************/
 u32 SerialKeyPressed(uint8_t *key)
 {
-  
-   // LPC17xxHwRS485TxEnable(0);
-   if ( (LPC_UART1->LSR & 0X01)==1 )
-   {
-      *key=LPC_UART1->RBR;
-      m=*key;
-      return 1;
-    } else {
+    if ( (LPC_UART1->LSR & 0X01)==1 )
+    {
+        *key=LPC_UART1->RBR;
+        m=*key;
+        return 1;
+    }
+    else
+    {
         return 0;
-    }  
+    }
 }
 
 /*******************************************************************************
@@ -204,7 +235,8 @@ uint8_t GetKey(void)
 {
     uint8_t key = 0;
     /* Waiting for user input */
-    while (1) {
+    while (1)
+    {
 
         if (SerialKeyPressed((uint8_t*)&key)) break;
     }
@@ -240,23 +272,21 @@ void SerialPutChar(uint8_t c)
 *******************************************************************************/
 void Serial_PutString(uint8_t *s)
 {
- 
-      LPC17xxHwRS485TxEnable(1);
+
+    LPC17xxHwRS485TxEnable(1);
     delay_msp();
-    
-   // delay_msp();
-  
-    while (*s != '\0') {
-      while ( !(LPC_UART1->LSR & 0X20) );
-    /* write data */
-      LPC_UART1->THR = *s;
-     delay_msp();
-       // SerialPutChar(*s);
+
+    while (*s != '\0')
+    {
+        while ( !(LPC_UART1->LSR & 0X20) );
+        /* write data */
+        LPC_UART1->THR = *s;
+        delay_msp();
         s ++;
     }
     delay_msp();
     LPC17xxHwRS485TxEnable(0);
-    
+
 }
 
 /*******************************************************************************
@@ -270,27 +300,33 @@ void GetInputString (uint8_t * buffP)
 {
     u32 bytes_read = 0;
     uint8_t c = 0;
-    do {
+    do
+    {
         c = GetKey();
         if (c == '\r')
             break;
-        if (c == '\b') { /* Backspace */
-            if (bytes_read > 0) {
+        if (c == '\b')   /* Backspace */
+        {
+            if (bytes_read > 0)
+            {
                 SerialPutString("\b \b");
                 bytes_read --;
             }
             continue;
         }
-        if (bytes_read >= CMD_STRING_SIZE ) {
+        if (bytes_read >= CMD_STRING_SIZE )
+        {
             SerialPutString("Command string size overflow\r\n");
             bytes_read = 0;
             continue;
         }
-        if (c >= 0x20 && c <= 0x7E) {
+        if (c >= 0x20 && c <= 0x7E)
+        {
             buffP[bytes_read++] = c;
             SerialPutChar(c);
         }
-    } while (1);
+    }
+    while (1);
     SerialPutString(("\n\r"));
     buffP[bytes_read] = '\0';
 }
@@ -307,9 +343,12 @@ u32 FLASH_PagesMask(vu32 Size)
     u32 pagenumber = 0x0;
     u32 size = Size;
 
-    if ((size % PAGE_SIZE) != 0) {
+    if ((size % PAGE_SIZE) != 0)
+    {
         pagenumber = (size / PAGE_SIZE) + 1;
-    } else {
+    }
+    else
+    {
         pagenumber = size / PAGE_SIZE;
     }
     return pagenumber;
@@ -325,7 +364,7 @@ u32 FLASH_PagesMask(vu32 Size)
 *******************************************************************************/
 void FLASH_DisableWriteProtectionPages(void)
 {
-  
+
 }
 
 /*******************************************************************************
@@ -347,45 +386,55 @@ void Main_Menu(void)
 #ifdef USE_STM3210B_EVAL
     UserMemoryMask = ((u32)~((1 << BlockNbr) - 1));
 #else /* USE_STM3210E_EVAL */
-    if (BlockNbr < 62) {
+    if (BlockNbr < 62)
+    {
         UserMemoryMask = ((u32)~((1 << BlockNbr) - 1));
-    } else {
+    }
+    else
+    {
         UserMemoryMask = ((u32)0x80000000);
     }
 #endif /* USE_STM3210B_EVAL */
 
-     // FlashProtection = TRUE;
+    // FlashProtection = TRUE;
     /* Test if any page of Flash memory where program user will be loaded is write protected */
-  /*  if ((FLASH_GetWriteProtectionOptionByte() & UserMemoryMask) != UserMemoryMask) {
-        
-        SerialPutString("\r\n==================== Main Menu ===========================\r\n\n");
-        SerialPutString("  Download Image To the STM32F10x Internal Flash ------- 1\r\n\n");
-        SerialPutString("  Execute The New Program ------------------------------ 2\r\n\n");
-        SerialPutString("  Disable the write protection ------------------------- 3\r\n\n");
-        SerialPutString("==========================================================\r\n\n");
-    } else {
-        FlashProtection = FALSE;
-        SerialPutString("\r\n==================== Main Menu ===========================\r\n\n");
-        SerialPutString("  Execute The New Program ------------------------------ 1\r\n\n");
-        SerialPutString("  Disable the write protection ------------------------- 2\r\n\n");
-        SerialPutString("==========================================================\r\n\n");
-    }*/
+    /*  if ((FLASH_GetWriteProtectionOptionByte() & UserMemoryMask) != UserMemoryMask) {
 
-    while (1) {
+          SerialPutString("\r\n==================== Main Menu ===========================\r\n\n");
+          SerialPutString("  Download Image To the STM32F10x Internal Flash ------- 1\r\n\n");
+          SerialPutString("  Execute The New Program ------------------------------ 2\r\n\n");
+          SerialPutString("  Disable the write protection ------------------------- 3\r\n\n");
+          SerialPutString("==========================================================\r\n\n");
+      } else {
+          FlashProtection = FALSE;
+          SerialPutString("\r\n==================== Main Menu ===========================\r\n\n");
+          SerialPutString("  Execute The New Program ------------------------------ 1\r\n\n");
+          SerialPutString("  Disable the write protection ------------------------- 2\r\n\n");
+          SerialPutString("==========================================================\r\n\n");
+      }*/
+
+    while (1)
+    {
         key = GetKey();
 
-        if (key == 0x31) {
+        if (key == 0x31)
+        {
             /* Download user application in the Flash */
             SerialDownload();
-        } 
-        else if (key == 0x32) {
-                  Boot();
         }
-        
-        else {
-            if (FlashProtection == FALSE) {
+        else if (key == 0x32)
+        {
+            Boot();
+        }
+
+        else
+        {
+            if (FlashProtection == FALSE)
+            {
                 SerialPutString("Error input, please enter 1 or 2\r");
-            } else {
+            }
+            else
+            {
                 SerialPutString("Error input, please enter 1,2 or 3\r");
             }
         }

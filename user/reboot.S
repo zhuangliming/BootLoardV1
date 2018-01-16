@@ -1,12 +1,12 @@
 
   IMPORT AppAddress
-  
-  EXPORT IrqEnable 
+
+  EXPORT IrqEnable
   EXPORT IrqDisable
   EXPORT JMP_Boot
-  
+
   SECTION .text:CODE(2)
-  THUMB 
+  THUMB
   REQUIRE8
   PRESERVE8
 
@@ -14,7 +14,7 @@ IrqEnable
     CPSIE   I
     MOV     R0, #0
     BX      LR
-    
+
 IrqDisable
     CPSID   I
     MOV     R0, #0
