@@ -47,7 +47,7 @@
 #define NAK_TIMEOUT             (0x100000)
 #define MAX_ERRORS              (5)
 
-#define IAP_ADD         0x00002000UL
+#define IAP_ADD         ApplicationAddress
 #define PAGE_SIZE       4096UL
 #define PAGE_OFFSET     2//(IAP_ADD/PAGE_SIZE)
 
