@@ -2,7 +2,7 @@
 
 <workspace>
   <project>
-    <path>$WS_DIR$\rs485bootloard.ewp</path>
+    <path>$WS_DIR$\BootLoaderV1.ewp</path>
   </project>
   <batchBuild/>
 </workspace>

@@ -8,11 +8,11 @@ void BootInit( void );
 void Boot( void );
 uint32_t *AppAddress;
 
-/* 定义4K空间，编程Flash时使用  */
-#define   IAP_BUF_LENGTH      1024ul
+/* 4K flash  */
+#define     IAP_BUF_LENGTH      1024ul
 uint8_t	    GucIapTmp[ IAP_BUF_LENGTH ] ;
-uint32_t                FLASH_SEC_INFO[ USER_FLASH_SEC_COUNT ];
-uint32_t                IAP_Flash_Address    = 0;
+uint32_t    FLASH_SEC_INFO[ USER_FLASH_SEC_COUNT ];
+uint32_t    IAP_Flash_Address    = 0;
 
 typedef void (*pFunction)(void);
 pFunction Jump_to_Application;
