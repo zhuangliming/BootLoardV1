@@ -15,23 +15,14 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "common.h"
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-//pFunction Jump_To_Application;
-u32 JumpAddress;
-u32 BlockNbr = 0, UserMemoryMask = 0;
-bool FlashProtection = FALSE;
-extern u32 FlashDestination;
-uint8_t m=0;
-void delay_msp(void);
-void delay_msp(void)
+
+static void delay_msp(void)
 {
+    u32 i;
 #if BUAD == 9600
-    u32 i=100000;
+    i=100000;
 #elseif BUAD == 19200
-    u32 i=50000;    
+    i=50000;
 #endif
     while(i--);
 }
@@ -219,7 +210,6 @@ u32 SerialKeyPressed(uint8_t *key)
     if ( (LPC_UART1->LSR & 0X01)==1 )
     {
         *key=LPC_UART1->RBR;
-        m=*key;
         return 1;
     }
     else
@@ -241,7 +231,6 @@ uint8_t GetKey(void)
     /* Waiting for user input */
     while (1)
     {
-
         if (SerialKeyPressed((uint8_t*)&key)) break;
     }
     return key;
@@ -263,7 +252,6 @@ void SerialPutChar(uint8_t c)
     /* write data */
     LPC_UART1->THR = c;
     delay_msp();
-    delay_msp();
     LPC17xxHwRS485TxEnable(0);
 }
 
@@ -279,13 +267,11 @@ void Serial_PutString(uint8_t *s)
 
     LPC17xxHwRS485TxEnable(1);
     delay_msp();
-
     while (*s != '\0')
     {
         while ( !(LPC_UART1->LSR & 0X20) );
         /* write data */
         LPC_UART1->THR = *s;
-        delay_msp();
         s ++;
     }
     delay_msp();
@@ -359,17 +345,6 @@ u32 FLASH_PagesMask(vu32 Size)
 
 }
 
-/*******************************************************************************
-* Function Name  : FLASH_DisableWriteProtectionPages
-* Description    : Disable the write protection of desired pages
-* Input          : None
-* Output         : None
-* Return         : None
-*******************************************************************************/
-void FLASH_DisableWriteProtectionPages(void)
-{
-
-}
 
 /*******************************************************************************
 * Function Name  : Main_Menu
@@ -382,40 +357,11 @@ void Main_Menu(void)
 {
     uint8_t key = 0;
 
-    /* Get the number of block (4 or 2 pages) from where the user program will be loaded */
-    BlockNbr = (FlashDestination - 0x00000000) >> 12;
-
-    /* Compute the mask to test if the Flash memory, where the user program will be
-       loaded, is write protected */
-#ifdef USE_STM3210B_EVAL
-    UserMemoryMask = ((u32)~((1 << BlockNbr) - 1));
-#else /* USE_STM3210E_EVAL */
-    if (BlockNbr < 62)
-    {
-        UserMemoryMask = ((u32)~((1 << BlockNbr) - 1));
-    }
-    else
-    {
-        UserMemoryMask = ((u32)0x80000000);
-    }
-#endif /* USE_STM3210B_EVAL */
-
-    // FlashProtection = TRUE;
-    /* Test if any page of Flash memory where program user will be loaded is write protected */
-    /*  if ((FLASH_GetWriteProtectionOptionByte() & UserMemoryMask) != UserMemoryMask) {
-
-          SerialPutString("\r\n==================== Main Menu ===========================\r\n\n");
-          SerialPutString("  Download Image To the STM32F10x Internal Flash ------- 1\r\n\n");
-          SerialPutString("  Execute The New Program ------------------------------ 2\r\n\n");
-          SerialPutString("  Disable the write protection ------------------------- 3\r\n\n");
-          SerialPutString("==========================================================\r\n\n");
-      } else {
-          FlashProtection = FALSE;
-          SerialPutString("\r\n==================== Main Menu ===========================\r\n\n");
-          SerialPutString("  Execute The New Program ------------------------------ 1\r\n\n");
-          SerialPutString("  Disable the write protection ------------------------- 2\r\n\n");
-          SerialPutString("==========================================================\r\n\n");
-      }*/
+    SerialPutString("\r\n==================== Main Menu ===========================\r\n\n");
+    SerialPutString("  Download Image To the LPC17XX Internal Flash --------- 1\r\n\n");
+    SerialPutString("  Execute The New Program ------------------------------ 2\r\n\n");
+    SerialPutString("  Disable the write protection ------------------------- 3\r\n\n");
+    SerialPutString("==========================================================\r\n\n");
 
     while (1)
     {
@@ -430,17 +376,9 @@ void Main_Menu(void)
         {
             Boot();
         }
-
         else
         {
-            if (FlashProtection == FALSE)
-            {
-                SerialPutString("Error input, please enter 1 or 2\r");
-            }
-            else
-            {
-                SerialPutString("Error input, please enter 1,2 or 3\r");
-            }
+            SerialPutString("Error input, please enter 1,2 or 3\r");
         }
     }
 }

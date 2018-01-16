@@ -3,13 +3,9 @@
 */
 /* Includes ------------------------------------------------------------------*/
 #include "common.h"
-#include "platform_config.h"
-void RCC_Configuration(void);
+
 void IAP_Init(void);
 /* Private typedef -----------------------------------------------------------*/
-
-
-extern u32 *AppAddress;
 
 static void delay_ms(uint16_t time)
 {
@@ -22,12 +18,9 @@ static void delay_ms(uint16_t time)
 int main(void)
 {
     uint8_t user_key=0;
-    u32 APP=0x0010;
     int i;
-    AppAddress=&APP;
     IAP_Init();
     LED_INIT();
-    BootInit();
     SerialPutString("\r\n----------------------------------------------------------");
     SerialPutString("\r\n            LPC1758  Cortex-M3 System Update V1.1         ");
     SerialPutString("\r\n  Note: this operation will upgrade your system firmware! ");
@@ -49,7 +42,6 @@ int main(void)
     SerialPutString(" Timeout Ready to jump to User APP\r\n");
     SerialPutString(" Please Reset MCU to upgrade your system firmware!\r\n");
     Boot();
-
     while (1)
     {
 

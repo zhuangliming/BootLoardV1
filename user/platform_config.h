@@ -28,9 +28,10 @@ typedef int32_t s32;
 typedef volatile uint32_t vu32;
 typedef int8_t bool;
 
-typedef enum _FLASH_Status{
-   FLASH_COMPLETE=0,
-}FLASH_Status;
+typedef enum _FLASH_Status
+{
+    FLASH_COMPLETE=0,
+} FLASH_Status;
 
 /*led*/
 #define LED_INIT()      GPIO_SetDir(1, 1<<23, 1)
